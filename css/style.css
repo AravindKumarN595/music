@@ -1,0 +1,88 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #121212;
+  color: white;
+  display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background: #000;
+  padding: 20px;
+  height: 100vh;
+}
+
+.sidebar h2 {
+  color: #1db954;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 15px 0;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.sidebar li.active {
+  opacity: 1;
+  font-weight: bold;
+}
+
+/* Main area */
+.main {
+  flex: 1;
+  padding: 20px;
+}
+.songs {
+  flex-direction: column;
+}
+
+.songs {
+  display: flex;
+  gap: 20px;
+}
+
+.card {
+  background: #181818;
+  padding: 20px;
+  width: 150px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card:hover {
+  background: #282828;
+}
+
+/* Player */
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 200px;
+  right: 0;
+  background: #181818;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controls button {
+  background: #1db954;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 50%;
+  margin: 0 5px;
+  cursor: pointer;
+}

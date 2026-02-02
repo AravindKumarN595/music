@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Music App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>🎧 MyMusic</h2>
+    <ul>
+      <li class="active">Home</li>
+      <li class="active">Search</li>
+      <li >Your Library</li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <h1>Recommended Telugu Songs</h1>
+
+    <div class="songs" id="songList">
+      <!-- Songs will be injected by JS -->
+    </div>
+  </div>
+
+  <!-- Bottom Player -->
+  <div class="player">
+    <p id="nowPlaying">No song playing</p>
+
+  <div class="controls">
+    <button onclick="prevSong()">⏮</button>
+    <button onclick="play()">▶</button>
+    <button onclick="pause()">⏸</button>
+    <button onclick="nextSong()">⏭</button>
+  </div>
+
+    <audio id="audio"></audio>
+  </div>
+  <div class="progress-container">
+  <span id="currentTime">0:00</span>
+
+  <input
+    type="range"
+    id="progressBar"
+    value="0"
+    min="0"
+    step="1"
+  />
+  <span id="duration">0:00</span>
+</div>
+
+
+  <script src="js/script.js"></script>
+</body>
+</html>
