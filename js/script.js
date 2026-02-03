@@ -1,12 +1,13 @@
 const audio = document.getElementById("audio");
 const nowPlaying = document.getElementById("nowPlaying");
 const songList = document.getElementById("songList");
-
 const progressBar = document.getElementById("progressBar");
 const currentTimeEl = document.getElementById("currentTime");
 const durationEl = document.getElementById("duration");
 
-// 🎵 SONG LIST (EXACTLY YOUR LIST)
+/* =========================
+   🎵 SONG DATA (UNCHANGED)
+========================= */
 const songs = [
   { file: "song1.mp3", title: "Time To Party" },
   { file: "song2.mp3", title: "Julayi Pakka Julayi" },
@@ -27,77 +28,84 @@ const songs = [
 ];
 
 let currentIndex = -1;
+let isShuffleOn = false;
 
-//
-// 📃 SHOW SONG LIST (ONE BELOW OTHER)
-//
+/* =========================
+   📃 BUILD SONG LIST
+========================= */
 songs.forEach((song, index) => {
   const div = document.createElement("div");
   div.className = "card";
   div.innerHTML = `<p>${index + 1}. 🎵 ${song.title}</p>`;
-  div.onclick = () => loadSong(index);
+  div.addEventListener("click", () => playSong(index));
   songList.appendChild(div);
 });
 
-//
-// ▶ LOAD & PLAY SONG
-//
-function loadSong(index) {
+/* =========================
+   ▶ CORE PLAYER FUNCTION
+========================= */
+function playSong(index) {
   currentIndex = index;
-  audio.pause();
   audio.src = "assets/" + songs[index].file;
-  audio.load();                 // 🔥 VERY IMPORTANT
+  audio.load();
   nowPlaying.innerText = "🎵 " + songs[index].title;
-  audio.play().catch(() => {});
+  audio.play();
 }
 
-//
-// ▶ PLAY → RANDOM FIRST
-//
+/* =========================
+   ▶ PLAY BUTTON
+========================= */
 function play() {
   if (currentIndex === -1) {
-    const randomIndex = Math.floor(Math.random() * songs.length);
-    loadSong(randomIndex);
+    playSong(0); // sequential start
   } else {
     audio.play();
   }
 }
 
-//
-// ⏸ PAUSE
-//
+/* =========================
+   ⏸ PAUSE
+========================= */
 function pauseSong() {
   audio.pause();
 }
+/* -- Toggle Shuffle */
+function toggleShuffle() {
+  isShuffleOn = !isShuffleOn;
 
-//
-// ⏭ NEXT
-//
+  const btn = document.getElementById("shuffleBtn");
+  btn.innerText = isShuffleOn ? "🔀 ON" : "🔀 OFF";
+
+  console.log("Shuffle mode:", isShuffleOn);
+}
+
+/* =========================
+   ⏭ NEXT (SEQUENTIAL)
+========================= */
 function nextSong() {
-  let next = currentIndex + 1;
-  if (next >= songs.length) next = 0;
-  loadSong(next);
+  const nextIndex = (currentIndex + 1) % songs.length;
+  playSong(nextIndex);
 }
 
-//
-// ⏮ PREVIOUS
-//
+/* =========================
+   ⏮ PREVIOUS
+========================= */
 function prevSong() {
-  let prev = currentIndex - 1;
-  if (prev < 0) prev = songs.length - 1;
-  loadSong(prev);
+  const prevIndex =
+    currentIndex === 0 ? songs.length - 1 : currentIndex - 1;
+  playSong(prevIndex);
 }
 
-//
-// 🔁 AUTO PLAY NEXT (THIS WAS YOUR MAIN ISSUE)
-//
-audio.onended = () => {
-  nextSong();
-};
+/* =========================
+   🔁 EVENT-DRIVEN AUTO PLAY
+========================= */
+audio.addEventListener("ended", () => {
+  nextSong();   // 🔥 THIS IS THE KEY
+});
 
-//
-// 📊 PROGRESS BAR + TIME
-//
+/* =========================
+   📊 PROGRESS BAR
+========================= */
 audio.addEventListener("loadedmetadata", () => {
   durationEl.innerText = formatTime(audio.duration);
 });
@@ -109,13 +117,12 @@ audio.addEventListener("timeupdate", () => {
 });
 
 progressBar.addEventListener("input", () => {
-  if (!audio.duration) return;
   audio.currentTime = (progressBar.value / 100) * audio.duration;
 });
 
-//
-// ⏱ TIME FORMAT
-//
+/* =========================
+   ⏱ TIME FORMAT
+========================= */
 function formatTime(time) {
   const min = Math.floor(time / 60);
   const sec = Math.floor(time % 60).toString().padStart(2, "0");
